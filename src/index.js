@@ -1,11 +1,11 @@
-delete global._bitcore;
-let bitcore = require('bitcore-lib');
+
+import * as bitcore from './bitcore-lib';
 import * as explorers from 'bitcore-explorers';
-import * as unit from "bitcore-lib/lib/unit";
+import * as unit from "./bitcore-lib/lib/unit";
 import * as Buffer from 'buffer';
 import * as bip39 from 'bip39';
 
-
+console.log(new bitcore.PrivateKey().toString());
 
 export default class BitcoinProvider {
     constructor(network) {
