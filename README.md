@@ -1,4 +1,4 @@
-#Bitcoin provider
+## Bitcoin provider ##
 
 Makes it easy to work with a bitcoin wallet.
 
@@ -24,6 +24,14 @@ const bitcoinProvider = new BitcoinProvider('testnet'); // or mainnet
 #### Create private key ####
 ```javascript
 const privateKey = bitcoinProvider.createPrivateKey();
+```
+#### Create private key from mnemonic ####
+```javascript
+const privateKey = bitcoinProvider.createPrivateKeyFromMnemonic(mnemonic);
+
+let mnemonic = 'absurd green cannon quarter call spray upper diet defense convince live assist'
+or 
+let mnemonic = bitcoinProvider.generateMnemonic()
 ```
 #### Create public key ####
 ```javascript

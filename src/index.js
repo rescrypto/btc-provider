@@ -2,28 +2,41 @@ delete global._bitcore;
 let bitcore = require('bitcore-lib');
 import * as explorers from 'bitcore-explorers';
 import * as unit from "bitcore-lib/lib/unit";
+import * as Buffer from 'buffer';
+import * as bip39 from 'bip39';
+
+
 
 export default class BitcoinProvider {
     constructor(network) {
 
-        if(network==='mainnet'){
+        if (network === 'mainnet') {
             this.insight = new explorers.Insight('mainnet');
             this.minerFee = unit.fromMilis(0.028).toSatoshis();
             bitcore.Networks.defaultNetwork = bitcore.Networks.mainnet;
-        }else{
+        } else {
             this.insight = new explorers.Insight('testnet');
             this.minerFee = unit.fromMilis(0.028).toSatoshis();
             bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
         }
 
     }
+    generateMnemonic() {
+        return bip39.generateMnemonic();
+    }
 
-
-     createPrivateKey() {
+    createPrivateKey() {
         return new bitcore.PrivateKey().toString()
 
     }
 
+    createPrivateKeyFromMnemonic(mnemonic) {
+        let value = new Buffer.Buffer(mnemonic);
+        let hash = bitcore.crypto.Hash.sha256(value);
+        let bn = bitcore.crypto.BN.fromBuffer(hash);
+        return new bitcore.PrivateKey(bn).toString();
+
+    }
 
     getBalance(address) {
         return new Promise((resolve, reject) => {
@@ -54,13 +67,13 @@ export default class BitcoinProvider {
     }
 
 
-     createTransaction (from, to, amountBTC, minerFeePerByte, privateKey) {
+    createTransaction(from, to, amountBTC, minerFeePerByte, privateKey) {
 
 
-         let amount =  bitcore.Unit(amountBTC, 'BTC').toSatoshis()
-         return new Promise( (resolve, reject)=> {
+        let amount = bitcore.Unit(amountBTC, 'BTC').toSatoshis()
+        return new Promise((resolve, reject) => {
 
-            this.insight.getUnspentUtxos(from, (error, utxos)=> {
+            this.insight.getUnspentUtxos(from, (error, utxos) => {
                 if (error) {
                     return reject(error);
                 } else {
@@ -83,7 +96,7 @@ export default class BitcoinProvider {
                                 .change(from)
                                 .sign(privateKey)
                                 .serialize();
-                            this.insight.broadcast(bitcore_transaction, function(error, body) {
+                            this.insight.broadcast(bitcore_transaction, function (error, body) {
                                 if (error) {
                                     reject('Error in broadcast: ' + error);
                                 } else {
@@ -103,9 +116,6 @@ export default class BitcoinProvider {
             });
         });
     }
-
-
-
 
 
 }
