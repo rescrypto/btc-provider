@@ -1,12 +1,19 @@
-
 import * as bitcore from './bitcore-lib';
 import * as explorers from 'bitcore-explorers';
 import * as unit from "./bitcore-lib/lib/unit";
 import * as Buffer from 'buffer';
 import * as bip39 from 'bip39';
 
-console.log(new bitcore.PrivateKey().toString());
+let m = 'better goat wrap planet organ foam fade steel siege slow island extra'
 
+let value = new Buffer.Buffer(m);
+let hash = bitcore.crypto.Hash.sha256(value);
+let bn = bitcore.crypto.BN.fromBuffer(hash);
+let mn= new bitcore.PrivateKey(bn).toString()
+
+let a = new bitcore.PrivateKey().toString();
+console.log(mn);
+console.log(new bitcore.PrivateKey(mn).toAddress().toString());
 export default class BitcoinProvider {
     constructor(network) {
 
@@ -21,6 +28,7 @@ export default class BitcoinProvider {
         }
 
     }
+
     generateMnemonic() {
         return bip39.generateMnemonic();
     }

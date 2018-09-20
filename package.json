@@ -1,12 +1,13 @@
 {
   "name": "btc-provider",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "makes it easy to work with a bitcoin wallet",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel --presets es2015,stage-0 -d lib/ src/",
     "prepublish": "npm run build",
-    "start": "babel-node --presets es2015 src/index.js"
+    "start": "babel-node --presets es2015 src/index.js",
+    "test": "babel-node --presets es2015 test/index.js"
   },
   "author": "vlad88vlad",
   "license": "ISC",
@@ -25,7 +26,10 @@
   "dependencies": {
     "bip39": "^2.5.0",
     "bitcore-explorers": "^1.0.1",
-    "buffer": "^5.2.1"
+    "bn.js": "^4.11.8",
+    "bs58": "^4.0.1",
+    "buffer": "^5.2.1",
+    "elliptic": "^6.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
